@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><link href="resources/css/bootstrap-3.3.2-dist/bootstrap.min.css" rel="stylesheet" /></head>
+<body>
+<div class="container">
+    <p>
+        Welcome to CSYE 6225 Spring 2018 Semester! Final presentation 123!
+    </p>
+    <form action="/loginHome" method="post">
+        User Name: <input type="email" name="username" required="required"/>
+        Password: <input type="password" name="password" required="required"/>
+        <input type="submit" value="Login"/><br/>
+        <p style="color:red;" th:text="${home}"></p>
+        <p style="color:darkgreen;" th:text="${success}"></p>
+    </form>
+
+    <p><form action="/resetPassword" method="post"><input type="submit" value="Forgot Password"/></form></p>
+    <p><form action="/user/signup" method="get"><input type="submit" value="Register User"/></form></p>
+
+    <form action="/user/search" method="post">
+        Search With Email Id: <input type="email" name="emailId" required="required"/>
+        <input type="submit" value="Search"/><br/>
+        <p style="color:red;" th:text="${user}"></p>
+    </form>
+
+</div>
+</body>
+</html>
+
+

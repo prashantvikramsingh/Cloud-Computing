@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <script th:inline="javascript">
+        function readURL(input) {
+            alert("Entered JS method");
+        }
+        function myFunction() {
+            document.getElementById("editAboutMe").contentEditable = true;
+            alert("Entered edit about me section");
+        }
+    </script>
+</head>
+<div th:replace="fragments/header :: header"/>
+<body>
+<div th:replace="fragments/navigation :: navigation"/>
+<!-- Page Content -->
+<div class="container">
+    <h2>Welcome </h2>
+
+    <p th:text="${home}"></p>
+    <p th:text="${user.userName}"></p>
+    <p th:text="${user.userId}"></p>
+
+    <p>About Me:</p>
+    <p th:text="${user.aboutMe}"></p>
+    <!--<p th:text="${user.aboutMe}" name="username" id="editAboutMe"></p>-->
+    <!--<button onclick="myFunction()">Edit about me section</button>-->
+
+    <form action="/user/updateAboutMe" method="post"><input type="submit" value="Update About Me"/>
+        <input type = "text" name = "aboutMe" th:value="${user.aboutMe}"/>
+        <input type = "hidden" name = "userName" th:value="${user.userName}"/>
+    </form>
+    <p><form action="/user/logout" method="post"><input type="submit" value="logout"/></form></p>
+</div>
+
+<div class="container">
+
+    <form action = "/readImage" method = "post" enctype="multipart/form-data">
+        <input type = "hidden" name = "userName" th:value="${user.userName}"/><!-- This binds the image to specific object -->
+
+
+        <!--For S3-->
+        <!--<p><img th:src = "@{'https://s3.amazonaws.com/web-app-csye6225-spring2018-krishnav.me/'+${user.userId}}" alt="No Image Selected" id="imageId1"  width="200" height="200"/></p>-->
+
+        <!--For Local File System-->
+        <!--<p><img th:src="@{'/images/'+${user.userName}}" width="200" height="200"/></p>-->
+
+        <!--<p><img th:src = "@{https://www.w3schools.com/images/w3schools_green.jpg}" alt="No Image Selected" id="imageId1"  width="200" height="200"/></p>-->
+
+        <div th:if="${user.name} == 'Y'">
+            <div th:switch="${activeProfile}">
+                <p th:case="'aws'"><img th:src = "@{'https://s3.amazonaws.com/web-app-csye6225-spring2018-singhpras.me/'+${user.userId}}" alt="No Image Selected" id="imageId1"  width="200" height="200"/></p>
+                <p th:case="'dev'"><img th:src="@{'/images/'+${user.userName}}" width="200" height="200"/></p>
+                <p th:case="*">User is some other thing</p>
+            </div>
+        </div>
+        <div th:if="${user.name} == 'N'">
+            <p><img th:src = "@{https://s3.amazonaws.com/web-app-csye6225-spring2018-singhpras.me/default.jpg}" alt="No Image Selected" width="200" height="200"/></p>
+        </div>
+
+        <p><input type="file" id="myFile" name = "file"/></p>
+        <p><input type="submit" value="Save Image" class="btn btn-primary"/></p>
+    </form>
+
+
+
+
+    <form action = "/deleteImage" method = "post">
+        <input type = "hidden" name = "userId" th:value="${user.userId}"/><!-- This binds the image to specific object -->
+        <input type = "hidden" name = "userName" th:value="${user.userName}"/>
+        <p><input type="submit" value="Delete Image" class="btn btn-primary"/></p>
+    </form>
+
+</div>
+<!-- /.container -->
+
+<div th:replace="fragments/footer :: footer"/>
+</body>
+</html>
+

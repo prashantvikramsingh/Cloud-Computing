@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<body>
+<div class="container">
+    <p>
+        <h2>User Registration Page</h2>
+    </p>
+    <form action="/user/register" method="post">
+        User Name: <input type="email" name="username" required="required"/>
+        Password: <input type="password" name="password" required="required"/>
+
+        <p>About Me: <textarea name = "aboutMe" maxlength="140" rows="4" cols="50"></textarea></p>
+
+        <input type="submit" value="Create Account"/>
+        <p style="color:red;" th:text="${error}"></p>
+    </form>
+
+</div>
+</body>
+</html>
+
+

@@ -1,0 +1,66 @@
+language: java
+jdk:
+- openjdk8
+#test
+
+sudo: false
+install: true
+
+branches:
+  only:
+   - assignment_9
+
+script:
+  - pwd
+  - cd webapp
+  - ./gradlew build
+  - ./gradlew war
+  - ./gradlew test --info
+  - cd ..
+
+after_success:
+  - pwd
+  - mkdir codedeploy_artifact
+  - cp infrastructure/aws/codedeploy/*.sh .
+  - cp infrastructure/aws/codedeploy/*.yml .
+  - zip -r csye6225-web-app-$TRAVIS_JOB_NUMBER.zip webapp/build/libs/ROOT.war appspec.yml *.sh
+  - ls -al
+  - mv csye6225-web-app-$TRAVIS_JOB_NUMBER.zip codedeploy_artifact/
+  - ls -al
+  - pwd
+  - cd codedeploy_artifact
+  - ls -al
+  - cd ..
+  - pwd
+
+deploy:
+  - provider: s3
+    local_dir: codedeploy_artifact
+    bucket: $s3_bucket
+    region: us-east-1
+    skip_cleanup: true
+    access_key_id: $access_key_id
+    secret_access_key: $secret_access_key
+    on:
+      branch: assignment_9
+  - provider: codedeploy
+    access_key_id: $access_key_id
+    secret_access_key: $secret_access_key
+    bucket: $s3_bucket
+    key: csye6225-web-app-$TRAVIS_JOB_NUMBER.zip
+    bundle_type: zip
+    application: $application
+    deployment_group: $deployment_group
+    region: us-east-1
+    wait-until-deployed: true
+    on:
+      branch: assignment_9
+
+notifications:
+  username:
+    recipients:
+      - vyas.c@northeastern.edu
+      - singh.pras@husky.neu.edu
+      - krishna.v@northeastern.edu
+    on_success: always
+    on_failure: always
