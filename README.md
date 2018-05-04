@@ -1,1 +1,1 @@
-# CSYE 6225 - Spring 2018 - Starter Application
+# CSYE 6225 - Spring 2018 - Web Application
